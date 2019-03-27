@@ -1,6 +1,8 @@
 // Require mysql and inquirer; mysql as database and inquirer for prompt
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+// Global variable representing user choice which will be updated 
+var chosenItem;
 // Establish connection to mysql
 var connection = mysql.createConnection({
     host: "localhost",
@@ -39,20 +41,23 @@ var order = function () {
                     message: "What is the ID number of the item you would like to bid on?",
                 })
                 .then(function (answer) {
-                    // .then for response after getting user input
-                    var chosenItem;
-                    // Loop through results and create if statement: if user input matches ID of item for sale, then the variable chosenItem will equal to result[i] (whichever ID number user enters)
-                    for (var i = 0; i < results.length; i++) {
-                        // Use parseInt for integer?
-                        if (parseInt(results[i].id) === parseInt(answer.choice)) {
-                            chosenItem = results[i];
-                }
-                    // Check if user-entered quantity is greater than or equal to quantity available?
-                    // Which means we need a variable for the new quantity//find a way to update quantity on DB
+                    // If user enters either q or Q, then end prompt
+                    if (answer.itemId === "q" || answer.itemId === "Q") {
+                        end();
                     }
-                    // If enough quantity then sale goes through
-                }
-                // If sale does not go through, which would be our else statement. Console log.
-        else {
-    console.log("Sorry, we don't have enough in stock! Please enter a smaller amount and try again");
-    }
+                    // Otherwise, prompt user of choice
+                    else {
+                        console.log("You chose item: " + answer.itemId);
+                        var chosenItem = answer.itemId - 1;
+                        // Call on function quantity, which is to be created and will ask how much of item chosen that user would like to buy
+                        quantity();
+                    }
+                })       
+            }
+            // Create function for quantity, which will need:
+            // Inquirer prompt asking how much quantity user would like to purchase, then test for q/Q input to quit
+            // Check user quantity with # of quantity available
+            // Sale either goes thru/returns error, both in console log
+            // Console log total price and update DB (look into SQL Update Statement)
+            
+        })}
