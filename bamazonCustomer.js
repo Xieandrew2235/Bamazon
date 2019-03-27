@@ -66,4 +66,10 @@ var order = function () {
                     }
                     else {
                         connection.query("SELECT * FROM products", function (err, response) {
-                           
+                            // Check user quantity with # of quantity available
+                            // Sale either goes thru/returns error, both in console log
+                            if ((response[chosenItem].stock_quantity - bam.purchase) < 0) {
+                                console.log("We don't have enuffa that!");
+                                start();
+                            }
+           
