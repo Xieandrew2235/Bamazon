@@ -84,29 +84,4 @@ var order = function () {
                             else {
                                 console.log("Congrats. You have bought " + res.purchase + " " + response[chosenItem].product_name + " for: ");
                                 console.log("$" + (res.purchase * response[chosenItem].price));
-                                // Console log total price and update DB (look into SQL Update Statement)
-                                var changeQuantity = response[chosenItem].stock_quantity - res.action;
-                                var query = connection.query("UPDATE products SET ? WHERE ?",
-                                    [
-                                        {
-                                            stock_quantity: changeQuantity
-                                        },
-                                        {
-                                            id: chosenItem + 1
-                                        }
-                                    ],
-                                    function (err, res) {
-                                        viewTable();
-                                    }
-                                );
-                            }
-                        })
-                    }
-                }
-
-                )
-            }
-        }
-    })
-}
-
+                                
