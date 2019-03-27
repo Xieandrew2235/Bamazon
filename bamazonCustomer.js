@@ -43,7 +43,7 @@ var order = function () {
                 .then(function (answer) {
                     // If user enters either q or Q, then end prompt
                     if (answer.itemId === "q" || answer.itemId === "Q") {
-                        end();
+                        connection.end();
                     }
                     // Otherwise, prompt user of choice
                     else {
@@ -52,12 +52,18 @@ var order = function () {
                         // Call on function quantity, which is to be created and will ask how much of item chosen that user would like to buy
                         quantity();
                     }
-                })       
-            }
+                })
             // Create function for quantity, which will need:
-            // Inquirer prompt asking how much quantity user would like to purchase, then test for q/Q input to quit
-            // Check user quantity with # of quantity available
-            // Sale either goes thru/returns error, both in console log
-            // Console log total price and update DB (look into SQL Update Statement)
-            
-        })}
+            function quantity() {
+                // Inquirer prompt asking how much quantity user would like to purchase, then test for q/Q input to quit
+                inquirer.prompt({
+                    name: "purchase",
+                    message: "How much of the product would you like? [You can press Q to exit LOL]",
+                    type: "input",
+                }).then(function (bam) {
+                    if (bam.purchase === "q" || bam.purchase === "Q") {
+                        connection.end();
+                    }
+                    else {
+                        connection.query("SELECT * FROM products", function (err, response) {
+                           
