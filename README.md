@@ -20,5 +20,5 @@
 
 4. After completing your purchase, Bamazon will tell you the total cost of your purchase, and immediately prompt you again with the opportunity to buy more items.
 
-#HAPPY SHOPPING!
+# HAPPY SHOPPING!
 
