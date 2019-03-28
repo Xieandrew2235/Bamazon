@@ -24,6 +24,8 @@ var viewTable = function () {
     connection.query("SELECT * FROM products", function (err, results) {
         if (err) throw err;
         for (var i = 0; i < results.length; i++) {
+            // Maybe stick into a table instead of just console.logging?
+            // Add header to table that lists out catagories
             console.log("| " + results[i].id + " | " + results[i].product_name + " | " + results[i].department_name + " | " + results[i].price + " | " + results[i].stock_quantity + " |");
         }
         order();
@@ -39,7 +41,7 @@ var order = function () {
                 .prompt({
                     name: "itemId",
                     type: "input",
-                    message: "What is the ID number of the item you would like to bid on?",
+                    message: "What is the ID number of the item you would like to buy?",
                 })
                 .then(function (answer) {
                     // If user enters either q or Q, then end prompt
@@ -70,6 +72,7 @@ var order = function () {
                         }
                     }
                     // If user enters either "q" or "Q", end connection
+                    // User has to input "q" or "Q" and then press enter, but connection does not end until letter is entered and enter button is pushed
                 }).then(function (res) {
                     if (res.action === "q" || res.action === "Q") {
                         connection.end();
@@ -84,7 +87,8 @@ var order = function () {
                             }
                             else {
                                 console.log("Thank you for your purchase! You have bought " + res.action + " " + response[chosenItem].product_name + " for $" + (res.action * response[chosenItem].price + ". Hope to see you again soon!"));
-                                 // Console log total price and update DB (look into SQL Update Statement)
+                                // Not quite fully functional with calculating total; some numbers go up to 7 digits after the . in the price, which I believe has something to do with parameters set in our SQL sheet for our database? 
+                                // Console log total price and update DB (look into SQL Update Statement)
                                  var changeQuantity = response[chosenItem].stock_quantity - res.action;
                                  var query = connection.query("UPDATE products SET ? WHERE ?",
                                      [
@@ -95,6 +99,7 @@ var order = function () {
                                              id: chosenItem + 1
                                          }
                                      ],
+                                    //  Try to create shopping cart instead of buying one specific item at a time?
                                     //  Calls on viewTable function again to restart so that user can make another purchase
                                      function (err, res) {
                                          viewTable();
