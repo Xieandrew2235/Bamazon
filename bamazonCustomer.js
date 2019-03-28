@@ -69,6 +69,7 @@ var order = function () {
                             return true;
                         }
                     }
+                    // If user enters either "q" or "Q", end connection
                 }).then(function (res) {
                     if (res.action === "q" || res.action === "Q") {
                         connection.end();
@@ -82,6 +83,30 @@ var order = function () {
                                 start();
                             }
                             else {
-                                console.log("Congrats. You have bought " + res.purchase + " " + response[chosenItem].product_name + " for: ");
-                                console.log("$" + (res.purchase * response[chosenItem].price));
-                                
+                                console.log("Thank you for your purchase! You have bought " + res.action + " " + response[chosenItem].product_name + " for $" + (res.action * response[chosenItem].price + ". Hope to see you again soon!"));
+                                 // Console log total price and update DB (look into SQL Update Statement)
+                                 var changeQuantity = response[chosenItem].stock_quantity - res.action;
+                                 var query = connection.query("UPDATE products SET ? WHERE ?",
+                                     [
+                                         {
+                                             stock_quantity: changeQuantity
+                                         },
+                                         {
+                                             id: chosenItem + 1
+                                         }
+                                     ],
+                                    //  Calls on viewTable function again to restart so that user can make another purchase
+                                     function (err, res) {
+                                         viewTable();
+                                     }
+                                 );
+                             }
+                         })
+                     }
+                 }
+ 
+                 )
+             }
+         }
+     })
+ } 
